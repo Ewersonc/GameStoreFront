@@ -1,0 +1,61 @@
+<div class="pagina">
+  <app-header />
+
+  <main class="conteudo">
+    <div class="titulo">
+      <h1>Loja</h1>
+      <p>Escolha seus jogos e adicione ao carrinho.</p>
+    </div>
+
+    @if (carregando()) {
+      <p class="aviso">Carregando jogos...</p>
+    } @else if (erro()) {
+      <div class="aviso">
+        <p class="erro">{{ erro() }}</p>
+        <button type="button" class="btn" (click)="carregarJogos()">Tentar novamente</button>
+      </div>
+    } @else {
+      <section class="grade" aria-label="Catálogo de jogos">
+        @for (jogo of jogos(); track jogo.id) {
+          <article class="card">
+            <div class="capa" [style.background]="capa(jogo)">
+              @if (urlCapa(jogo); as url) {
+                <img class="imagem" [src]="url" [alt]="'Capa de ' + jogo.nome" loading="lazy"
+                     (error)="aoFalharCapa(jogo)" />
+              } @else {
+                <span class="sigla">{{ sigla(jogo) }}</span>
+              }
+            </div>
+
+            <div class="corpo">
+              <span class="genero">{{ jogo.genero }}</span>
+              <h2>{{ jogo.nome }}</h2>
+              <p class="meta">{{ jogo.desenvolvedor }} · {{ jogo.anoLancamento }}</p>
+              <p class="sinopse">{{ jogo.sinopse }}</p>
+            </div>
+
+            <div class="rodape">
+              <span class="preco">{{ jogo.valor | currency: 'BRL' }}</span>
+
+              @if (carrinho.contem(jogo.id)) {
+                <button type="button" class="btn marcado" (click)="carrinho.remover(jogo.id)"
+                        [attr.aria-label]="'Remover ' + jogo.nome + ' do carrinho'">
+                  No carrinho ✓
+                </button>
+              } @else {
+                <button type="button" class="btn" (click)="carrinho.adicionar(jogo)"
+                        [attr.aria-label]="'Adicionar ' + jogo.nome + ' ao carrinho'">
+                  Adicionar
+                </button>
+              }
+            </div>
+          </article>
+        } @empty {
+          <p class="aviso">Nenhum jogo disponível no momento.</p>
+        }
+      </section>
+    }
+  </main>
+
+  <app-carrinho />
+</div>

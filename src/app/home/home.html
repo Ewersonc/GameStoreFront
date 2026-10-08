@@ -1,0 +1,43 @@
+<div class="tela">
+  <div class="esquerda">
+  </div>
+  <div class="direita">
+
+    <div class="painel">
+
+      <div class="tabs">
+        <button class="tab" [class.ativo]="modo() === 'login'" (click)="trocarModo('login')">
+          Login
+        </button>
+        <button class="tab" [class.ativo]="modo() === 'cadastro'" (click)="trocarModo('cadastro')">
+          Cadastrar
+        </button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()">
+        @if (modo() === 'cadastro') {
+          <input type="text" placeholder="nome" [(ngModel)]="nome" name="nome" required />
+          <input type="email" placeholder="email" [(ngModel)]="email" name="email" required />
+        }
+
+        @if (modo() === 'login') {
+          <input type="email" placeholder="E-mail" [(ngModel)]="email" name="email" required />
+        }
+
+        <input type="password" placeholder="Senha" [(ngModel)]="senha" name="senha" required />
+
+        @if (sucesso()) {
+          <p class="mensagem-sucesso">{{ sucesso() }}</p>
+        }
+
+        @if (erro()) {
+          <p class="mensagem-erro">{{ erro() }}</p>
+        }
+
+        <button type="submit" [disabled]="carregando()">
+          {{ carregando() ? 'Aguarde...' : (modo() === 'login' ? 'acessar' : 'cadastrar') }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

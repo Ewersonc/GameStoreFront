@@ -1,0 +1,51 @@
+@if (carrinho.aberto()) {
+  <div class="fundo" (click)="fechar()"></div>
+
+  <aside class="painel" role="dialog" aria-modal="true" aria-label="Carrinho de compras">
+    <div class="topo">
+      <h2>Seu carrinho</h2>
+      <button type="button" class="fechar" (click)="fechar()" aria-label="Fechar carrinho">✕</button>
+    </div>
+
+    @if (pedidoCriado() !== null) {
+      <div class="mensagem">
+        <p class="sucesso">Pedido #{{ codigoPedido(pedidoCriado()!) }} realizado com sucesso!</p>
+        <button type="button" class="botao" (click)="fechar()">Continuar comprando</button>
+      </div>
+    } @else if (carrinho.itens().length === 0) {
+      <p class="vazio">Seu carrinho está vazio.</p>
+    } @else {
+      <ul class="lista">
+        @for (jogo of carrinho.itens(); track jogo.id) {
+          <li class="item">
+            <div class="info">
+              <strong>{{ jogo.nome }}</strong>
+              <span>{{ jogo.genero }}</span>
+            </div>
+            <span class="preco">{{ jogo.valor | currency: 'BRL' }}</span>
+            <button type="button" class="remover" (click)="carrinho.remover(jogo.id)"
+                    [attr.aria-label]="'Remover ' + jogo.nome">remover</button>
+          </li>
+        }
+      </ul>
+
+      <div class="rodape">
+        <div class="total">
+          <span>Total</span>
+          <strong>{{ carrinho.total() | currency: 'BRL' }}</strong>
+        </div>
+
+        @if (erro()) {
+          <p class="erro">{{ erro() }}</p>
+        }
+
+        <button type="button" class="botao" (click)="finalizar()" [disabled]="enviando()">
+          {{ enviando() ? 'Enviando...' : 'Finalizar pedido' }}
+        </button>
+        <button type="button" class="secundario" (click)="carrinho.limpar()" [disabled]="enviando()">
+          Esvaziar carrinho
+        </button>
+      </div>
+    }
+  </aside>
+}

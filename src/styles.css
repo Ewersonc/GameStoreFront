@@ -1,0 +1,22 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+:root {
+  --cor-primaria: #1e1e1e;
+  --cor-primaria-clara: #2a2a2a;
+  --cor-secundaria: #ff7a00;
+  --cor-texto: #f2f2f2;
+  --cor-texto-secundario: #b3b3b3;
+}
